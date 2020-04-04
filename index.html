@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="main.css"/>
+    <title>PhotoGallery</title>
+</head>
+<body>
+  
+        <div id="modal">
+            <center>
+                <img src="./t1.jpg" alt="" id='preview_img'>
+                <span class="close-btn" style="color: aliceblue;" onclick="document.querySelector('#modal').style.display='none';">&times;</span>
+            </center>
+        </div>
+    <header>
+        <nav>
+            <div id="topnav">
+                <h3>PhotoGallery</h3>
+                <img src="./menu-icon.png" alt="" class="hamburger" onclick="toggleMenu();">
+            </div>
+        </nav>
+        <div id="panel">
+            <a href='#' class="link">Home</a>
+            <a href="#" class="link">About Us</a>
+            <a href="#" class="link">Contact Us</a>
+            <span class="close-btn" onclick="closeMenu()">&times;</span>
+        </div>
+    </header>
+    <main> 
+    
+        <div id="grid">
+            <div id="center">
+                    <h1>Welcome</h1><br>
+                    <p class="emphasise">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita maxime in consequatur saepe perspiciatis delectus labore inventore eligendi veritatis, voluptate velit fugiat neque atque recusandae.
+                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Vel, obcaecati aut. Sequi tempora corporis consequuntur alias perferendis quam at voluptates!
+                        
+                    </p>
+            </div>
+        </div>
+        <br>
+        <span class="caption">Featured</span><br>
+        <div id="slideBox">
+            <div class="fill"></div>
+            <img src="t1.jpg" alt="" id='img' class="thumbnail">
+            <img src="t2.jpg" alt="" id='img' class="thumbnail">
+            <img src="t3.jpg" alt="" id='img' class="thumbnail">
+            <img src="t1.jpg" alt="" id='img' class="thumbnail">
+            <img src="t2.jpg" alt="" id='img' class="thumbnail">
+            <img src="t3.jpg" alt="" id='img' class="thumbnail">
+            <div class='fill'></div>
+        </div>
+        <span class="caption">Explore</span>
+        <div id="main">
+            
+        <div class="holder" id="one" data-title="Camel">
+            <img src="t1.jpg" alt="" id='img' class="thumbnail">
+        </div>
+        <div class="holder two" >
+            <img src="t2.jpg" alt="" id='img' class="thumbnail">
+        </div>
+        <div class="holder" >
+            <img src="t3.jpg" alt="" id='img' class="thumbnail">
+        </div>
+        <div class="holder" >
+            <img src="t4.jpg" alt="" id='img'  class="thumbnail">
+        </div>
+        <div class="holder" >
+            <img src="t5.jpg" alt="" id='img' class="thumbnail">
+        </div>
+        <div class="holder" >
+            <img src="t6.jpg" alt="" id='img' class="thumbnail">
+        </div>
+        <div class="holder" >
+            <img src="t7.jpg" alt="" id='img' class="thumbnail">
+        </div>
+        <div class="holder" > 
+            <img src="t8.jpg" alt="" id='img' class="thumbnail">
+        </div>
+    </div>
+    </main>
+    <br><br><br><br><br>
+    <footer>
+       <br>
+        <a href="">Contact</a><br>
+        <a href="">About</a>
+        <div id="footer">
+            <h3>PhotoGallery</h3> 
+        </div>
+        <p class="text-sm">All Rights Reserved 2019-20</p>
+        <br>
+       
+    </footer>
+<script>
+    window.onload = function(){
+    
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+       
+        var titles=[];
+        var img_holders = document.querySelectorAll('.holder');
+    
+      for(var j in JSON.parse(this.response)){
+          titles.push(JSON.parse(this.response)[j].title);
+      }
+      for(var i=0;i<img_holders.length;i++){
+        img_holders[i].classList.remove('loading');
+        img_holders[i].setAttribute('data-title'  , titles[i]);
+        
+}
+    }
+    else{
+        var img_holders = document.querySelectorAll('.holder');
+        for(var i=0;i<img_holders.length;i++){
+        img_holders[i].setAttribute('data-title'  , 'Loading...');
+        img_holders[i].classList.add('loading');
+}
+    }
+    
+  };
+ 
+    xhttp.open("GET", "https://api.myjson.com/bins/hh6kn", true);
+    xhttp.send();
+
+    }
+    let toggleMenu=()=>{
+        document.querySelector('#panel').style.display='block';
+        document.querySelector('#panel').style.animation="revealMenu 600ms ease-in-out forwards";
+
+            setTimeout(()=>{
+                var a = document.getElementsByClassName('link');
+                for (var i = 0; i < a.length; i++) {
+                    a[i].style.display = 'flex';
+                }
+                document.querySelector('.close-btn').style.display='flex';    
+            },400);
+    document.querySelector('.hamburger').style.display='none';
+    }
+    let closeMenu = ()=>{
+        document.querySelector('#panel').style.animation = "slideUp 600ms forwards ease-in-out";
+        var elems = document.querySelector('#panel').children;
+        for(var k=0;k<elems.length;k++){
+            elems[k].style.display='none';
+        }
+        setTimeout(() => {
+            document.querySelector('#panel').style.display = 'none';
+        }, 600);
+        document.querySelector('.hamburger').style.display = 'block';
+        }
+   var THRESHOLD;
+
+   var screen_width = screen.width;
+   
+       var initial_h = '125px';
+       var max_height = '145px';
+   
+   THRESHOLD = (.30*screen_width);
+   var IMG_W = document.getElementById('slideBox').children[1].width;
+    document.getElementById('slideBox').onscroll=()=>{
+        var slideBox = document.querySelector('#slideBox');
+        var slides = slideBox.children;
+        for(var j=0;j<slides.length;j++){
+            var posX = slides[j].getBoundingClientRect().left;
+            if (posX>0 && posX > THRESHOLD && posX<(THRESHOLD+ slides[j].width) ){
+                slides[j].style.height= max_height;
+               
+            }else{
+                slides[j].style.height= initial_h;
+                
+            }
+    }}
+    var thumbnails = document.querySelectorAll('.thumbnail');
+    document.addEventListener('click',(e)=>{
+        if(e.target.matches('.thumbnail')){
+            var src = e.target.src;
+            document.getElementById('preview_img').src = src;
+            document.getElementById('modal').style.display='flex';
+        }
+    });
+</script>
+</body>
+</html>
